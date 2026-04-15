@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-carrent}
+      POSTGRES_USER: ${POSTGRES_USER:-carrent_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-supersecretpassword}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-carrent_user} -d ${POSTGRES_DB:-carrent}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+ 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://carrent_user:supersecretpassword@postgres:5432/carrent}
+      JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret}
+      VIN_API_KEY: ${VIN_API_KEY:-}
+      NODE_ENV: development
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "3000:3000"
+    command: npm run dev
+ 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
+ 
+volumes:
+  pgdata:
