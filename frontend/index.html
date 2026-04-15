@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mosquit — Аренда автомобилей в Москве</title>
+  <meta name="description" content="Mosquit — аренда автомобилей в Москве. Большой выбор автомобилей, выгодные цены, доставка по городу 24/7." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="20" fill="var(--primary)"/>
+          <path d="M8 26l4-8h16l4 8H8z" fill="white" opacity="0.9"/>
+          <circle cx="14" cy="27" r="3" fill="white"/>
+          <circle cx="26" cy="27" r="3" fill="white"/>
+          <path d="M10 22h20" stroke="white" stroke-width="1.5"/>
+        </svg>
+        <span class="logo__text">Mosquit</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="/" class="nav__link" data-page="home">Главная</a>
+        <a href="/catalog.html" class="nav__link" data-page="catalog">Каталог</a>
+        <a href="#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <div class="header__actions">
+        <div class="auth-buttons" id="authButtons">
+          <button class="btn btn--ghost btn--sm" id="loginBtn">Войти</button>
+        </div>
+        <div class="user-menu hidden" id="userMenu">
+          <button class="user-avatar" id="userAvatarBtn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <span class="user-dropdown__email" id="userEmail"></span>
+            <div class="user-dropdown__divider"></div>
+            <a href="/admin.html" class="user-dropdown__item admin-link hidden" id="adminLink">Панель управления</a>
+            <a href="/support.html" class="user-dropdown__item support-link hidden" id="supportLink">Поддержка</a>
+            <button class="user-dropdown__item user-dropdown__item--danger" id="logoutBtn">Выйти</button>
+          </div>
+        </div>
+        <button class="burger" id="burgerBtn" aria-label="Меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+ 
+  <!-- MAIN CONTENT -->
+  <main id="main">
+    <!-- HOME PAGE -->
+    <div id="homePage">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero__bg"></div>
+        <div class="container hero__content">
+          <div class="hero__text fade-in">
+            <h1 class="hero__title" id="heroTitle">Аренда автомобилей в Москве</h1>
+            <p class="hero__subtitle" id="heroSubtitle">Большой выбор автомобилей по выгодным ценам.<br>Доставка по всей Москве 24/7.</p>
+            <div class="hero__actions">
+              <a href="/catalog.html" class="btn btn--primary btn--lg">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Выбрать автомобиль
+              </a>
+              <a href="#how-it-works" class="btn btn--outline btn--lg">Как это работает</a>
+            </div>
+          </div>
+          <div class="hero__visual fade-in fade-in--delay">
+            <div class="hero__car-card">
+              <div class="hero__car-badge">Хит сезона</div>
+              <svg class="hero__car-svg" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="55" width="240" height="45" rx="8" fill="#2D3748"/>
+                <path d="M40 55 C50 25 70 20 100 20 L180 20 C210 20 230 25 240 55" fill="#3A5331"/>
+                <circle cx="75" cy="100" r="18" fill="#1A202C"/>
+                <circle cx="75" cy="100" r="10" fill="#4A5568"/>
+                <circle cx="205" cy="100" r="18" fill="#1A202C"/>
+                <circle cx="205" cy="100" r="10" fill="#4A5568"/>
+                <rect x="55" y="30" width="170" height="30" rx="4" fill="rgba(134,239,172,0.2)"/>
+                <rect x="240" y="65" width="10" height="15" rx="3" fill="#FCD34D"/>
+                <rect x="30" y="65" width="10" height="15" rx="3" fill="#FCA5A5"/>
+              </svg>
+              <div class="hero__car-info">
+                <span class="hero__car-class">Бизнес-класс</span>
+                <span class="hero__car-price">от 9 500 ₽/сутки</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero__scroll-hint">
+          <span>Прокрутите вниз</span>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </section>
+ 
+      <!-- Benefits -->
+      <section class="benefits">
+        <div class="container">
+          <div class="benefits__grid">
+            <div class="benefit-card fade-in">
+              <div class="benefit-card__icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="22" fill="var(--accent)" opacity="0.2"/>
+                  <path d="M24 12L14 17v10c0 5.5 4.3 10.7 10 12 5.7-1.3 10-6.5 10-12V17L24 12z" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round"/>
+                  <path d="M18 24l4 4 8-8" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="benefit-card__title">Страховка включена</h3>
+              <p class="benefit-card__text">Полное КАСКО и ОСАГО включены в стоимость аренды. Никаких скрытых доплат.</p>
+            </div>
+            <div class="benefit-card fade-in">
+              <div class="benefit-card__icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="22" fill="var(--accent)" opacity="0.2"/>
+                  <path d="M24 16v8l4 4" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="24" cy="24" r="10" stroke="var(--primary)" stroke-width="2.5"/>
+                  <path d="M10 10l4 4M38 10l-4 4" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="benefit-card__title">Без залога</h3>
+              <p class="benefit-card__text">Не требуем залог при бронировании. Только оплата за фактические дни аренды.</p>
+            </div>
+            <div class="benefit-card fade-in">
+              <div class="benefit-card__icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="22" fill="var(--accent)" opacity="0.2"/>
+                  <path d="M20 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0zM16 36v-4c0-4.4 3.6-8 8-8s8 3.6 8 8v4" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M32 20c2.2 1 4 3.3 4 6v4M16 20c-2.2 1-4 3.3-4 6v4" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="benefit-card__title">Поддержка 24/7</h3>
+              <p class="benefit-card__text">Наши операторы на связи круглосуточно. Ответим на любой вопрос в течение 5 минут.</p>
+            </div>
+            <div class="benefit-card fade-in">
+              <div class="benefit-card__icon">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="24" cy="24" r="22" fill="var(--accent)" opacity="0.2"/>
+                  <path d="M24 38c-7.7 0-14-6.3-14-14S16.3 10 24 10" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M30 12l6 2-2 6" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M36 14C33 10 29 8 24 8" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M22 22h4v4" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="benefit-card__title">Доставка по Москве</h3>
+              <p class="benefit-card__text">Привезём автомобиль в любую точку Москвы и МО. Бесплатно в пределах МКАД.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- Popular Cars -->
+      <section class="popular-cars">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Популярные автомобили</h2>
+            <a href="/catalog.html" class="section-link">Смотреть все →</a>
+          </div>
+          <div class="cars-grid" id="popularCarsGrid">
+            <div class="car-card skeleton"></div>
+            <div class="car-card skeleton"></div>
+            <div class="car-card skeleton"></div>
+            <div class="car-card skeleton"></div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- How it works -->
+      <section class="how-it-works" id="how-it-works">
+        <div class="container">
+          <h2 class="section-title text-center">Как это работает</h2>
+          <div class="steps">
+            <div class="step fade-in">
+              <div class="step__number">1</div>
+              <div class="step__content">
+                <h3 class="step__title">Выберите автомобиль</h3>
+                <p class="step__text">Используйте фильтры в каталоге, чтобы найти идеальный автомобиль по классу, кузову и цене.</p>
+              </div>
+            </div>
+            <div class="step__arrow">→</div>
+            <div class="step fade-in">
+              <div class="step__number">2</div>
+              <div class="step__content">
+                <h3 class="step__title">Забронируйте</h3>
+                <p class="step__text">Заполните форму бронирования: укажите даты и контактные данные. Подтверждение придёт на email.</p>
+              </div>
+            </div>
+            <div class="step__arrow">→</div>
+            <div class="step fade-in">
+              <div class="step__number">3</div>
+              <div class="step__content">
+                <h3 class="step__title">Получите авто</h3>
+                <p class="step__text">Мы доставим автомобиль в удобное место. Документы, ключи — и вы готовы к поездке!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- Footer -->
+      <footer class="footer" id="contacts">
+        <div class="container footer__inner">
+          <div class="footer__brand">
+            <a href="/" class="logo">
+              <svg class="logo__icon" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="20" fill="var(--primary)"/>
+                <path d="M8 26l4-8h16l4 8H8z" fill="white" opacity="0.9"/>
+                <circle cx="14" cy="27" r="3" fill="white"/>
+                <circle cx="26" cy="27" r="3" fill="white"/>
+              </svg>
+              <span class="logo__text">Mosquit</span>
+            </a>
+            <p class="footer__desc">Надёжная аренда автомобилей в Москве с 2020 года.</p>
+          </div>
+          <div class="footer__contacts">
+            <h4 class="footer__heading">Контакты</h4>
+            <a class="footer__contact-item" id="footerPhone" href="tel:+78001234567">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5 19.79 19.79 0 01.01 4.18C0 3.08.9 2 2.02 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2"/></svg>
+              <span id="footerPhoneText">+7 (800) 123-45-67</span>
+            </a>
+            <a class="footer__contact-item" id="footerEmail" href="mailto:info@mosquit.ru">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2"/></svg>
+              <span id="footerEmailText">info@mosquit.ru</span>
+            </a>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg>
+              <span id="footerAddress">Москва, ул. Автомобильная, 1</span>
+            </div>
+          </div>
+          <div class="footer__links">
+            <h4 class="footer__heading">Навигация</h4>
+            <a href="/" class="footer__link">Главная</a>
+            <a href="/catalog.html" class="footer__link">Каталог автомобилей</a>
+            <a href="#how-it-works" class="footer__link">Как арендовать</a>
+            <a href="#contacts" class="footer__link">Контакты</a>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <div class="container">
+            <p>© <span id="footerYear"></span> <span id="footerSiteName">Mosquit</span>. Все права защищены.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+ 
+  <!-- LOGIN MODAL -->
+  <div class="modal hidden" id="loginModal">
+    <div class="modal__overlay" id="loginModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="loginModalClose">&times;</button>
+      <h2 class="modal__title">Вход в аккаунт</h2>
+      <form class="form" id="loginForm">
+        <div class="form__group">
+          <label class="form__label" for="loginEmail">Email</label>
+          <input class="form__input" type="email" id="loginEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="loginPassword">Пароль</label>
+          <div class="form__input-wrap">
+            <input class="form__input" type="password" id="loginPassword" placeholder="••••••••" required />
+            <button type="button" class="form__eye" id="togglePassword">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form__error hidden" id="loginError"></div>
+        <button class="btn btn--primary btn--full" type="submit" id="loginSubmit">
+          <span>Войти</span>
+          <span class="spinner hidden"></span>
+        </button>
+      </form>
+      <p class="modal__footer-text">Нет аккаунта? <button class="link-btn" id="showRegister">Зарегистрироваться</button></p>
+    </div>
+  </div>
+ 
+  <!-- REGISTER MODAL -->
+  <div class="modal hidden" id="registerModal">
+    <div class="modal__overlay" id="registerModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="registerModalClose">&times;</button>
+      <h2 class="modal__title">Регистрация</h2>
+      <form class="form" id="registerForm">
+        <div class="form__group">
+          <label class="form__label" for="regEmail">Email</label>
+          <input class="form__input" type="email" id="regEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="regPassword">Пароль</label>
+          <input class="form__input" type="password" id="regPassword" placeholder="Минимум 6 символов" required />
+        </div>
+        <div class="form__error hidden" id="registerError"></div>
+        <button class="btn btn--primary btn--full" type="submit">Зарегистрироваться</button>
+      </form>
+      <p class="modal__footer-text">Уже есть аккаунт? <button class="link-btn" id="showLogin">Войти</button></p>
+    </div>
+  </div>
+ 
+  <!-- CHAT WIDGET -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-fab" id="chatFab" aria-label="Открыть чат">
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg class="chat-fab__close hidden" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="chat-fab__badge hidden" id="chatBadge">0</span>
+    </button>
+    <div class="chat-window hidden" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header__info">
+          <div class="chat-header__avatar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2"/></svg>
+          </div>
+          <div>
+            <div class="chat-header__name">Поддержка Mosquit</div>
+            <div class="chat-header__status" id="chatStatus">
+              <span class="status-dot status-dot--online"></span>
+              <span>Онлайн</span>
+            </div>
+          </div>
+        </div>
+        <button class="chat-header__close" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-welcome">
+          <div class="chat-welcome__icon">👋</div>
+          <p>Здравствуйте! Чем могу помочь?</p>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Напишите сообщение..." maxlength="1000" />
+        <button class="chat-send" id="chatSendBtn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22 11 13 2 9 22 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

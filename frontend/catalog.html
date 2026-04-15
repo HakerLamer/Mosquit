@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог автомобилей — Mosquit</title>
+  <meta name="description" content="Каталог автомобилей для аренды в Москве. Фильтры по классу, кузову, цене." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="20" fill="var(--primary)"/>
+          <path d="M8 26l4-8h16l4 8H8z" fill="white" opacity="0.9"/>
+          <circle cx="14" cy="27" r="3" fill="white"/>
+          <circle cx="26" cy="27" r="3" fill="white"/>
+        </svg>
+        <span class="logo__text">Mosquit</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="/" class="nav__link">Главная</a>
+        <a href="/catalog.html" class="nav__link nav__link--active">Каталог</a>
+        <a href="/#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <div class="header__actions">
+        <div class="auth-buttons" id="authButtons">
+          <button class="btn btn--ghost btn--sm" id="loginBtn">Войти</button>
+        </div>
+        <div class="user-menu hidden" id="userMenu">
+          <button class="user-avatar" id="userAvatarBtn">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <span class="user-dropdown__email" id="userEmail"></span>
+            <div class="user-dropdown__divider"></div>
+            <a href="/admin.html" class="user-dropdown__item admin-link hidden" id="adminLink">Панель управления</a>
+            <a href="/support.html" class="user-dropdown__item support-link hidden" id="supportLink">Поддержка</a>
+            <button class="user-dropdown__item user-dropdown__item--danger" id="logoutBtn">Выйти</button>
+          </div>
+        </div>
+        <button class="burger" id="burgerBtn" aria-label="Меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+ 
+  <main class="catalog-page">
+    <div class="container catalog-layout">
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar" id="filtersSidebar">
+        <div class="filters-sidebar__header">
+          <h2 class="filters-sidebar__title">Фильтры</h2>
+          <button class="filters-reset" id="resetFilters">Сбросить</button>
+          <button class="filters-sidebar__close" id="filtersClose">×</button>
+        </div>
+ 
+        <div class="filter-group">
+          <label class="filter-label">Поиск</label>
+          <div class="search-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input class="form__input search-input" type="text" id="searchInput" placeholder="Марка или модель..." />
+          </div>
+        </div>
+ 
+        <div class="filter-group">
+          <label class="filter-label">Класс</label>
+          <div class="checkbox-group" id="classFilter">
+            <label class="checkbox-item"><input type="checkbox" value="economy" /> Эконом</label>
+            <label class="checkbox-item"><input type="checkbox" value="comfort" /> Комфорт</label>
+            <label class="checkbox-item"><input type="checkbox" value="business" /> Бизнес</label>
+            <label class="checkbox-item"><input type="checkbox" value="premium" /> Премиум</label>
+          </div>
+        </div>
+ 
+        <div class="filter-group">
+          <label class="filter-label">КПП</label>
+          <div class="checkbox-group" id="gearboxFilter">
+            <label class="checkbox-item"><input type="checkbox" value="auto" /> Автомат</label>
+            <label class="checkbox-item"><input type="checkbox" value="manual" /> Механика</label>
+          </div>
+        </div>
+ 
+        <div class="filter-group">
+          <label class="filter-label">Тип кузова</label>
+          <div class="checkbox-group" id="bodyFilter">
+            <label class="checkbox-item"><input type="checkbox" value="sedan" /> Седан</label>
+            <label class="checkbox-item"><input type="checkbox" value="suv" /> SUV / Кроссовер</label>
+            <label class="checkbox-item"><input type="checkbox" value="hatchback" /> Хэтчбек</label>
+            <label class="checkbox-item"><input type="checkbox" value="wagon" /> Универсал</label>
+            <label class="checkbox-item"><input type="checkbox" value="minivan" /> Минивэн</label>
+          </div>
+        </div>
+ 
+        <div class="filter-group">
+          <label class="filter-label">Цена в сутки, ₽</label>
+          <div class="price-range">
+            <div class="price-range__inputs">
+              <input class="form__input price-input" type="number" id="priceMin" placeholder="От" min="0" />
+              <span class="price-range__dash">—</span>
+              <input class="form__input price-input" type="number" id="priceMax" placeholder="До" min="0" />
+            </div>
+          </div>
+        </div>
+ 
+        <button class="btn btn--primary btn--full" id="applyFilters">Применить</button>
+      </aside>
+ 
+      <!-- Catalog Content -->
+      <div class="catalog-content">
+        <div class="catalog-toolbar">
+          <div class="catalog-toolbar__left">
+            <button class="btn btn--ghost btn--sm filters-toggle" id="filtersToggle">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Фильтры
+            </button>
+            <span class="catalog-count" id="catalogCount"></span>
+          </div>
+          <div class="catalog-toolbar__right">
+            <select class="form__input sort-select" id="sortSelect">
+              <option value="price_asc">Цена: по возрастанию</option>
+              <option value="price_desc">Цена: по убыванию</option>
+              <option value="year_desc">Год: новее</option>
+              <option value="year_asc">Год: старше</option>
+              <option value="popular">По популярности</option>
+            </select>
+          </div>
+        </div>
+ 
+        <div class="cars-grid" id="catalogGrid">
+          <div class="car-card skeleton"></div>
+          <div class="car-card skeleton"></div>
+          <div class="car-card skeleton"></div>
+          <div class="car-card skeleton"></div>
+          <div class="car-card skeleton"></div>
+          <div class="car-card skeleton"></div>
+        </div>
+ 
+        <div class="empty-state hidden" id="emptyState">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="38" stroke="var(--secondary)" stroke-width="2" opacity="0.3"/>
+            <path d="M20 50l6-12h28l6 12H20z" stroke="var(--secondary)" stroke-width="2" stroke-linejoin="round" opacity="0.5"/>
+            <circle cx="30" cy="52" r="4" stroke="var(--secondary)" stroke-width="2" opacity="0.5"/>
+            <circle cx="50" cy="52" r="4" stroke="var(--secondary)" stroke-width="2" opacity="0.5"/>
+          </svg>
+          <h3>Автомобили не найдены</h3>
+          <p>Попробуйте изменить параметры фильтрации</p>
+          <button class="btn btn--outline" id="emptyReset">Сбросить фильтры</button>
+        </div>
+ 
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+ 
+  <!-- AUTH MODALS (same as index) -->
+  <div class="modal hidden" id="loginModal">
+    <div class="modal__overlay" id="loginModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="loginModalClose">&times;</button>
+      <h2 class="modal__title">Вход в аккаунт</h2>
+      <form class="form" id="loginForm">
+        <div class="form__group">
+          <label class="form__label" for="loginEmail">Email</label>
+          <input class="form__input" type="email" id="loginEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="loginPassword">Пароль</label>
+          <div class="form__input-wrap">
+            <input class="form__input" type="password" id="loginPassword" placeholder="••••••••" required />
+            <button type="button" class="form__eye" id="togglePassword">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form__error hidden" id="loginError"></div>
+        <button class="btn btn--primary btn--full" type="submit">Войти</button>
+      </form>
+      <p class="modal__footer-text">Нет аккаунта? <button class="link-btn" id="showRegister">Зарегистрироваться</button></p>
+    </div>
+  </div>
+ 
+  <div class="modal hidden" id="registerModal">
+    <div class="modal__overlay" id="registerModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="registerModalClose">&times;</button>
+      <h2 class="modal__title">Регистрация</h2>
+      <form class="form" id="registerForm">
+        <div class="form__group">
+          <label class="form__label" for="regEmail">Email</label>
+          <input class="form__input" type="email" id="regEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="regPassword">Пароль</label>
+          <input class="form__input" type="password" id="regPassword" placeholder="Минимум 6 символов" required />
+        </div>
+        <div class="form__error hidden" id="registerError"></div>
+        <button class="btn btn--primary btn--full" type="submit">Зарегистрироваться</button>
+      </form>
+      <p class="modal__footer-text">Уже есть аккаунт? <button class="link-btn" id="showLogin">Войти</button></p>
+    </div>
+  </div>
+ 
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-fab" id="chatFab" aria-label="Открыть чат">
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg class="chat-fab__close hidden" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="chat-fab__badge hidden" id="chatBadge">0</span>
+    </button>
+    <div class="chat-window hidden" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header__info">
+          <div class="chat-header__avatar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2"/></svg>
+          </div>
+          <div>
+            <div class="chat-header__name">Поддержка Mosquit</div>
+            <div class="chat-header__status" id="chatStatus">
+              <span class="status-dot status-dot--online"></span><span>Онлайн</span>
+            </div>
+          </div>
+        </div>
+        <button class="chat-header__close" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-welcome"><div class="chat-welcome__icon">👋</div><p>Здравствуйте! Чем могу помочь?</p></div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Напишите сообщение..." maxlength="1000" />
+        <button class="chat-send" id="chatSendBtn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22 11 13 2 9 22 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/catalog.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

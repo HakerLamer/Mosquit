@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Автомобиль — Mosquit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="/" class="logo">
+        <svg class="logo__icon" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="20" fill="var(--primary)"/>
+          <path d="M8 26l4-8h16l4 8H8z" fill="white" opacity="0.9"/>
+          <circle cx="14" cy="27" r="3" fill="white"/>
+          <circle cx="26" cy="27" r="3" fill="white"/>
+        </svg>
+        <span class="logo__text">Mosquit</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="/" class="nav__link">Главная</a>
+        <a href="/catalog.html" class="nav__link">Каталог</a>
+        <a href="/#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <div class="header__actions">
+        <div class="auth-buttons" id="authButtons">
+          <button class="btn btn--ghost btn--sm" id="loginBtn">Войти</button>
+        </div>
+        <div class="user-menu hidden" id="userMenu">
+          <button class="user-avatar" id="userAvatarBtn">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <span class="user-dropdown__email" id="userEmail"></span>
+            <div class="user-dropdown__divider"></div>
+            <a href="/admin.html" class="user-dropdown__item admin-link hidden" id="adminLink">Панель управления</a>
+            <a href="/support.html" class="user-dropdown__item support-link hidden" id="supportLink">Поддержка</a>
+            <button class="user-dropdown__item user-dropdown__item--danger" id="logoutBtn">Выйти</button>
+          </div>
+        </div>
+        <button class="burger" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+ 
+  <main class="car-page" id="carPage">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Главная</a>
+        <span>›</span>
+        <a href="/catalog.html">Каталог</a>
+        <span>›</span>
+        <span id="breadcrumbCar">Загрузка...</span>
+      </div>
+ 
+      <div class="car-detail" id="carDetail">
+        <!-- Loaded by JS -->
+        <div class="car-detail__gallery skeleton-block"></div>
+        <div class="car-detail__info">
+          <div class="skeleton-block" style="height:40px;margin-bottom:16px"></div>
+          <div class="skeleton-block" style="height:20px;margin-bottom:8px;width:60%"></div>
+          <div class="skeleton-block" style="height:20px;width:40%"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+ 
+  <!-- BOOKING MODAL -->
+  <div class="modal hidden" id="bookingModal">
+    <div class="modal__overlay" id="bookingModalOverlay"></div>
+    <div class="modal__content modal__content--wide">
+      <button class="modal__close" id="bookingModalClose">&times;</button>
+      <h2 class="modal__title">Забронировать автомобиль</h2>
+      <h3 class="booking-car-name" id="bookingCarName"></h3>
+      <form class="form" id="bookingForm">
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="bookingName">ФИО *</label>
+            <input class="form__input" type="text" id="bookingName" placeholder="Иванов Иван Иванович" required />
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="bookingPhone">Телефон *</label>
+            <input class="form__input" type="tel" id="bookingPhone" placeholder="+7 (999) 123-45-67" required />
+          </div>
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="bookingEmail">Email *</label>
+          <input class="form__input" type="email" id="bookingEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="bookingDateStart">Дата начала *</label>
+            <input class="form__input" type="date" id="bookingDateStart" required />
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="bookingDateEnd">Дата окончания *</label>
+            <input class="form__input" type="date" id="bookingDateEnd" required />
+          </div>
+        </div>
+        <div class="booking-summary" id="bookingSummary">
+          <div class="booking-summary__row">
+            <span>Количество дней:</span>
+            <span id="summaryDays">—</span>
+          </div>
+          <div class="booking-summary__row">
+            <span>Цена в сутки:</span>
+            <span id="summaryPriceDay">—</span>
+          </div>
+          <div class="booking-summary__row booking-summary__row--total">
+            <span>Итого:</span>
+            <span id="summaryTotal">—</span>
+          </div>
+        </div>
+        <div class="form__error hidden" id="bookingError"></div>
+        <div class="booking-conditions">
+          <p>⚠️ Требования: возраст от 21 года, стаж вождения от 2 лет, паспорт + водительское удостоверение</p>
+        </div>
+        <button class="btn btn--primary btn--full btn--lg" type="submit" id="bookingSubmit">Забронировать</button>
+      </form>
+    </div>
+  </div>
+ 
+  <!-- AUTH MODALS -->
+  <div class="modal hidden" id="loginModal">
+    <div class="modal__overlay" id="loginModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="loginModalClose">&times;</button>
+      <h2 class="modal__title">Вход в аккаунт</h2>
+      <form class="form" id="loginForm">
+        <div class="form__group">
+          <label class="form__label">Email</label>
+          <input class="form__input" type="email" id="loginEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label">Пароль</label>
+          <div class="form__input-wrap">
+            <input class="form__input" type="password" id="loginPassword" placeholder="••••••••" required />
+            <button type="button" class="form__eye" id="togglePassword">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form__error hidden" id="loginError"></div>
+        <button class="btn btn--primary btn--full" type="submit">Войти</button>
+      </form>
+      <p class="modal__footer-text">Нет аккаунта? <button class="link-btn" id="showRegister">Зарегистрироваться</button></p>
+    </div>
+  </div>
+ 
+  <div class="modal hidden" id="registerModal">
+    <div class="modal__overlay" id="registerModalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="registerModalClose">&times;</button>
+      <h2 class="modal__title">Регистрация</h2>
+      <form class="form" id="registerForm">
+        <div class="form__group">
+          <label class="form__label">Email</label>
+          <input class="form__input" type="email" id="regEmail" placeholder="mail@example.ru" required />
+        </div>
+        <div class="form__group">
+          <label class="form__label">Пароль</label>
+          <input class="form__input" type="password" id="regPassword" placeholder="Минимум 6 символов" required />
+        </div>
+        <div class="form__error hidden" id="registerError"></div>
+        <button class="btn btn--primary btn--full" type="submit">Зарегистрироваться</button>
+      </form>
+      <p class="modal__footer-text">Уже есть аккаунт? <button class="link-btn" id="showLogin">Войти</button></p>
+    </div>
+  </div>
+ 
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-fab" id="chatFab" aria-label="Открыть чат">
+      <svg class="chat-fab__icon" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg class="chat-fab__close hidden" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="chat-fab__badge hidden" id="chatBadge">0</span>
+    </button>
+    <div class="chat-window hidden" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header__info">
+          <div class="chat-header__avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="2"/></svg></div>
+          <div>
+            <div class="chat-header__name">Поддержка Mosquit</div>
+            <div class="chat-header__status" id="chatStatus"><span class="status-dot status-dot--online"></span><span>Онлайн</span></div>
+          </div>
+        </div>
+        <button class="chat-header__close" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-welcome"><div class="chat-welcome__icon">👋</div><p>Здравствуйте!</p></div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Напишите сообщение..." maxlength="1000" />
+        <button class="chat-send" id="chatSendBtn"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22 11 13 2 9 22 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+ 
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/car.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>
