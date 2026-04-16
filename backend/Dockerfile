@@ -5,4 +5,4 @@ RUN npm install --omit=dev
 COPY . .
 RUN mkdir -p uploads
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node db/migrate.js && node server.js"]

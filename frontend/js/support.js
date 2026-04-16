@@ -1,97 +1,119 @@
-// js/support.js
+(() => {
+  const sessionsList = document.getElementById("sessionsList");
+  const chatArea = document.getElementById("supportChatArea");
+  if (!sessionsList || !chatArea) return;
 
-let socket;
-let currentSession = null;
+  const statusFilter = document.getElementById("sessionStatusFilter");
+  let currentSession = null;
+  let socket;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await checkAuth();
-  loadChats();
-  initSocket();
-});
-
-
-// 🔐 AUTH
-async function checkAuth() {
-  const user = await api.get("/api/auth/me");
-
-  if (!["support", "admin"].includes(user.role)) {
-    location.href = "/";
+  async function checkAuth() {
+    try {
+      const user = await api.get("/api/auth/me");
+      if (!["support", "admin"].includes(user.role)) {
+        location.href = "/";
+        return false;
+      }
+      document.getElementById("adminUser")?.replaceChildren(document.createTextNode(user.email));
+      return true;
+    } catch {
+      location.href = "/";
+      return false;
+    }
   }
-}
 
+  async function loadSessions() {
+    try {
+      const q = statusFilter?.value ? `?status=${statusFilter.value}` : "";
+      const rows = await api.get(`/api/chat/sessions${q}`);
+      sessionsList.innerHTML = rows.map(s => `
+        <button class="admin-nav__item" data-session="${s.session_id}">
+          <span>${s.user_label || s.session_id}</span>
+          <small class="session-status">${s.status}</small>
+        </button>
+      `).join("");
 
-// 📋 CHATS
-async function loadChats() {
-  const chats = await api.get("/api/support/chats");
+      sessionsList.querySelectorAll("[data-session]").forEach(btn => btn.addEventListener("click", () => {
+        openSession(btn.dataset.session);
+      }));
+    } catch {
+      sessionsList.innerHTML = '<p>Не удалось загрузить чаты</p>';
+    }
+  }
 
-  document.getElementById("chat-list").innerHTML =
-    chats.map(c => `
-      <div onclick="openChat('${c.session_id}')">
-        ${c.session_id}
-        <span>${c.status}</span>
+  async function openSession(sessionId) {
+    currentSession = sessionId;
+    try {
+      const rows = await api.get(`/api/chat/sessions/${sessionId}/messages`);
+      renderMessages(rows);
+      socket?.emit("support_join_session", sessionId);
+    } catch {
+      chatArea.innerHTML = '<div class="card">Не удалось загрузить сообщения</div>';
+    }
+  }
+
+  function renderMessages(rows) {
+    chatArea.innerHTML = `
+      <div class="card support-chat-card">
+        <div id="supportMessages" class="support-messages"></div>
+        <div class="support-input-row">
+          <input id="supportInput" class="form__input" placeholder="Сообщение..." />
+          <button id="supportSend" class="btn btn--primary">Отправить</button>
+        </div>
+      </div>
+    `;
+
+    const box = document.getElementById("supportMessages");
+    box.innerHTML = rows.map(m => `
+      <div class="${m.role === 'user' ? 'support' : 'user'} support-message-row">
+        <div class="card support-message-bubble">${m.text}</div>
       </div>
     `).join("");
-}
 
+    document.getElementById("supportSend")?.addEventListener("click", sendMessage);
+    document.getElementById("supportInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  }
 
-// 📩 OPEN CHAT
-async function openChat(sessionId) {
-  currentSession = sessionId;
+  function sendMessage() {
+    const input = document.getElementById("supportInput");
+    if (!input || !currentSession || !input.value.trim()) return;
+    const text = input.value.trim();
+    socket?.emit("send_message", { sessionId: currentSession, text, role: "support" });
+    input.value = "";
+  }
 
-  const messages = await api.get(`/api/support/chats/${sessionId}`);
-  renderMessages(messages);
-}
+  function initSocket() {
+    socket = io("/");
+    const token = localStorage.getItem("token");
+    if (token) socket.emit("join_support", token);
 
+    socket.on("new_message", (msg) => {
+      if (msg.session_id !== currentSession) return;
+      const box = document.getElementById("supportMessages");
+      if (!box) return;
+      box.insertAdjacentHTML("beforeend", `
+        <div class="${msg.role === 'user' ? 'support' : 'user'} support-message-row">
+          <div class="card support-message-bubble">${msg.text}</div>
+        </div>
+      `);
+      box.scrollTop = box.scrollHeight;
+    });
 
-// 🧾 RENDER
-function renderMessages(messages) {
-  const el = document.getElementById("chat");
+    socket.on("session_updated", () => loadSessions());
+  }
 
-  el.innerHTML = messages.map(m => `
-    <div class="${m.role}">
-      ${m.text}
-    </div>
-  `).join("");
-}
-
-
-// 📡 SOCKET
-function initSocket() {
-  socket = io("/");
-
-  socket.on("chat:message", (msg) => {
-    if (msg.session_id === currentSession) {
-      appendMessage(msg);
-    }
-  });
-}
-
-function appendMessage(msg) {
-  const el = document.getElementById("chat");
-
-  el.innerHTML += `
-    <div class="${msg.role}">
-      ${msg.text}
-    </div>
-  `;
-}
-
-
-// ✉️ SEND
-function sendMessage() {
-  const text = getValue("message");
-
-  socket.emit("chat:message", {
-    session_id: currentSession,
-    text,
+  document.getElementById("adminLogout")?.addEventListener("click", async () => {
+    try { await api.post("/api/auth/logout", {}); } catch {}
+    location.href = "/";
   });
 
-  setValue("message", "");
-}
+  statusFilter?.addEventListener("change", loadSessions);
 
-
-// 🔒 CLOSE
-async function closeChat() {
-  await api.post(`/api/support/chats/${currentSession}/close`);
-  loadChats();
-}
+  checkAuth().then(ok => {
+    if (!ok) return;
+    loadSessions();
+    initSocket();
+  });
+})();

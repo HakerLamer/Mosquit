@@ -1,183 +1,127 @@
-// js/admin.js
+(() => {
+  const root = document.getElementById("adminContent");
+  if (!root) return;
 
-let currentCarId = null;
+  const sections = Array.from(document.querySelectorAll(".admin-section"));
+  const navItems = Array.from(document.querySelectorAll(".admin-nav__item[data-section]"));
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await checkAuth();
-  loadDashboard();
-  loadCars();
-  loadBookings();
-  loadUsers();
-  loadTheme();
-  initSocket();
-});
+  const showSection = (name) => {
+    sections.forEach(s => s.classList.toggle("hidden", s.id !== `section-${name}`));
+    navItems.forEach(i => i.classList.toggle("active", i.dataset.section === name));
+    const title = document.getElementById("adminTitle");
+    if (title) title.textContent = navItems.find(i => i.dataset.section === name)?.textContent.trim() || "Панель";
+  };
 
+  navItems.forEach(i => i.addEventListener("click", (e) => {
+    e.preventDefault();
+    showSection(i.dataset.section);
+  }));
 
-// 🔐 AUTH
-async function checkAuth() {
-  try {
-    const user = await api.get("/api/auth/me");
+  document.getElementById("sidebarToggle")?.addEventListener("click", () => {
+    const sidebar = document.getElementById("adminSidebar");
+    if (!sidebar) return;
+    sidebar.style.display = sidebar.style.display === "none" ? "flex" : "none";
+  });
 
-    if (user.role !== "admin") {
+  async function checkAuth() {
+    try {
+      const user = await api.get("/api/auth/me");
+      if (user.role !== "admin") return (location.href = "/");
+      const userEl = document.getElementById("adminUser");
+      if (userEl) userEl.textContent = user.email;
+    } catch {
       location.href = "/";
     }
-  } catch {
-    location.href = "/login.html";
-  }
-}
-
-
-// 📊 DASHBOARD
-async function loadDashboard() {
-  const stats = await api.get("/api/admin/stats");
-
-  document.getElementById("cars-count").innerText = stats.cars;
-  document.getElementById("bookings-count").innerText = stats.bookings;
-  document.getElementById("revenue").innerText = stats.revenue + " ₽";
-}
-
-
-// 🚗 CARS
-async function loadCars() {
-  const cars = await api.get("/api/admin/cars");
-  renderCars(cars);
-}
-
-function renderCars(cars) {
-  const el = document.getElementById("cars");
-
-  el.innerHTML = cars.map(c => `
-    <div class="card">
-      <b>${c.brand} ${c.model}</b>
-      <p>${c.price_1day} ₽</p>
-      <button onclick="editCar(${c.id})">✏️</button>
-      <button onclick="deleteCar(${c.id})">🗑</button>
-    </div>
-  `).join("");
-}
-
-async function saveCar() {
-  const data = {
-    vin: getValue("vin"),
-    car_class: getValue("class"),
-    price_1day: +getValue("price"),
-  };
-
-  if (currentCarId) {
-    await api.put(`/api/admin/cars/${currentCarId}`, data);
-  } else {
-    await api.post("/api/admin/cars", data);
   }
 
-  showToast("Сохранено");
-  loadCars();
-}
+  async function loadStats() {
+    try {
+      const data = await api.get("/api/admin/stats");
+      document.getElementById("statCars").textContent = data.cars_count ?? data.cars ?? "0";
+      document.getElementById("statBookings").textContent = data.active_bookings ?? data.bookings ?? "0";
+      document.getElementById("statChats").textContent = data.open_chats ?? "0";
+      document.getElementById("statRevenue").textContent = `${Number(data.month_revenue ?? data.revenue ?? 0).toLocaleString("ru-RU")} ₽`;
+    } catch {}
+  }
 
-async function deleteCar(id) {
-  if (!confirm("Удалить авто?")) return;
+  async function loadCars() {
+    const tbody = document.getElementById("carsTableBody");
+    if (!tbody) return;
+    try {
+      const cars = await api.get("/api/admin/cars");
+      tbody.innerHTML = (cars || []).map(c => `
+        <tr>
+          <td><img src="${c.main_photo || '/assets/car-placeholder.svg'}" alt="${c.brand}" class="admin-thumb"></td>
+          <td>${c.brand} ${c.model}</td>
+          <td>${c.year || "—"}</td>
+          <td>${c.car_class || "—"}</td>
+          <td>${c.price_1day || "—"} ₽</td>
+          <td>${c.is_available ? "Да" : "Нет"}</td>
+          <td><button class="btn btn--ghost" data-del="${c.id}">Удалить</button></td>
+        </tr>
+      `).join("");
 
-  await api.del(`/api/admin/cars/${id}`);
-  loadCars();
-}
+      tbody.querySelectorAll("[data-del]").forEach(btn => btn.addEventListener("click", async () => {
+        if (!confirm("Удалить авто?")) return;
+        await api.del(`/api/admin/cars/${btn.dataset.del}`);
+        loadCars();
+      }));
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="7">Не удалось загрузить автомобили</td></tr>';
+    }
+  }
 
-async function editCar(id) {
-  const car = await api.get(`/api/admin/cars/${id}`);
-  currentCarId = id;
+  async function loadBookings() {
+    const tbody = document.getElementById("bookingsTableBody");
+    if (!tbody) return;
+    try {
+      const data = await api.get("/api/admin/bookings");
+      const rows = data.bookings || [];
+      tbody.innerHTML = rows.map(b => `
+        <tr>
+          <td>${b.id}</td>
+          <td>${b.brand || ""} ${b.model || ""}</td>
+          <td>${b.user_name || "—"}</td>
+          <td>${b.date_start || "—"} — ${b.date_end || "—"}</td>
+          <td>${b.total_price || "—"} ₽</td>
+          <td>${b.status}</td>
+          <td>—</td>
+        </tr>
+      `).join("");
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="7">Не удалось загрузить бронирования</td></tr>';
+    }
+  }
 
-  setValue("vin", car.vin);
-}
+  async function loadUsers() {
+    const tbody = document.getElementById("usersTableBody");
+    if (!tbody) return;
+    try {
+      const rows = await api.get("/api/admin/users");
+      tbody.innerHTML = rows.map(u => `
+        <tr>
+          <td>${u.email}</td>
+          <td>${u.role}</td>
+          <td>${u.is_blocked ? "Заблокирован" : "Активен"}</td>
+          <td>${new Date(u.created_at).toLocaleString("ru-RU")}</td>
+          <td>—</td>
+        </tr>
+      `).join("");
+    } catch {
+      tbody.innerHTML = '<tr><td colspan="5">Не удалось загрузить пользователей</td></tr>';
+    }
+  }
 
-
-// 📸 UPLOAD
-async function uploadPhotos() {
-  const input = document.getElementById("photos");
-  const formData = new FormData();
-
-  [...input.files].forEach(f => formData.append("photos", f));
-
-  await fetch(`/api/admin/cars/${currentCarId}/photos`, {
-    method: "POST",
-    body: formData,
-    credentials: "include",
+  document.getElementById("adminLogout")?.addEventListener("click", async () => {
+    try { await api.post("/api/auth/logout", {}); } catch {}
+    location.href = "/";
   });
 
-  showToast("Фото загружены");
-}
-
-
-// 📅 BOOKINGS
-async function loadBookings() {
-  const bookings = await api.get("/api/admin/bookings");
-
-  const el = document.getElementById("bookings");
-
-  el.innerHTML = bookings.map(b => `
-    <div class="card">
-      <b>${b.user_name}</b>
-      <p>${b.status}</p>
-      <select onchange="updateBooking(${b.id}, this.value)">
-        <option>${b.status}</option>
-        <option>подтверждена</option>
-        <option>активна</option>
-        <option>завершена</option>
-      </select>
-    </div>
-  `).join("");
-}
-
-async function updateBooking(id, status) {
-  await api.put(`/api/admin/bookings/${id}`, { status });
-}
-
-
-// 👥 USERS
-async function loadUsers() {
-  const users = await api.get("/api/admin/users");
-
-  const el = document.getElementById("users");
-
-  el.innerHTML = users.map(u => `
-    <div>
-      ${u.email}
-      <select onchange="changeRole(${u.id}, this.value)">
-        <option ${u.role==="user"?"selected":""}>user</option>
-        <option ${u.role==="support"?"selected":""}>support</option>
-        <option ${u.role==="admin"?"selected":""}>admin</option>
-      </select>
-    </div>
-  `).join("");
-}
-
-async function changeRole(id, role) {
-  await api.put(`/api/admin/users/${id}`, { role });
-}
-
-
-// 🎨 THEME
-async function loadTheme() {
-  const theme = await api.get("/api/settings/theme");
-
-  Object.entries(theme).forEach(([k,v])=>{
-    document.documentElement.style.setProperty(`--${k}`, v);
+  checkAuth().then(() => {
+    showSection("dashboard");
+    loadStats();
+    loadCars();
+    loadBookings();
+    loadUsers();
   });
-}
-
-async function saveTheme() {
-  const data = {
-    primary: getValue("primary"),
-    accent: getValue("accent"),
-  };
-
-  await api.put("/api/admin/settings/theme", data);
-  showToast("Тема обновлена");
-}
-
-
-// 💬 SOCKET
-function initSocket() {
-  const socket = io("/");
-
-  socket.on("chat:new", () => {
-    console.log("Новый чат");
-  });
-}
+})();

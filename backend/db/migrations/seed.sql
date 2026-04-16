@@ -1,4 +1,4 @@
-- Seed data for Mosquit Car Rental
+-- Seed data for Mosquit Car Rental
  
 -- Admin and support users (passwords: admin123, support123)
 INSERT INTO users (email, password_hash, role) VALUES
