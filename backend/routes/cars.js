@@ -99,6 +99,14 @@ router.get('/', [
       limit: parseInt(limit),
     });
   } catch (err) {
+    if (err.code === '42P01') {
+      return res.json({
+        cars: [],
+        total: 0,
+        page: parseInt(page),
+        limit: parseInt(limit),
+      });
+    }
     next(err);
   }
 });
@@ -117,6 +125,9 @@ router.get('/popular', async (req, res, next) => {
     );
     res.json(rows);
   } catch (err) {
+    if (err.code === '42P01') {
+      return res.json([]);
+    }
     next(err);
   }
 });
