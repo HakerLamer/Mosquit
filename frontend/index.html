@@ -6,6 +6,200 @@
   <title>Mosquit — аренда авто в Москве</title>
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
+
+  <style>
+    body {
+      background: linear-gradient(180deg, #f7f8fb 0%, #eef1f5 100%);
+      color: #182232;
+    }
+
+    .landing-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid #e6eaf0;
+    }
+
+    .landing-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+      color: #0f172a;
+    }
+
+    .brand span {
+      color: #ff5b2e;
+    }
+
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .landing-nav a:hover {
+      color: #ff5b2e;
+    }
+
+    .primary-btn {
+      background: #ff5b2e;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 600;
+      box-shadow: 0 10px 18px rgba(255, 91, 46, 0.2);
+    }
+
+    .primary-btn:hover {
+      background: #ec4f24;
+    }
+
+    .hero {
+      padding: 72px 0 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      color: #4b5563;
+      font-size: 18px;
+      margin-bottom: 28px;
+      max-width: 520px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-pill {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at 15% 20%, #fff7f2 0%, #ffffff 50%, #f6f8fc 100%);
+      border: 1px solid #e8ecf2;
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    .hero-image {
+      border-radius: 18px;
+      height: 230px;
+      object-fit: cover;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    .hero-card-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 24px 0;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #111827;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border: 1px solid #e7ebf1;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .feature-card h3 {
+      margin: 8px 0 6px;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    #popular-cars .card {
+      border-radius: 18px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    #popular-cars .card h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    #popular-cars .card p {
+      color: #ff5b2e;
+      font-weight: 700;
+    }
+
+    .landing-footer {
+      padding: 28px 0 36px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .landing-nav {
+        display: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="landing-header">
@@ -27,7 +221,7 @@
           <h1 class="hero-title">Аренда авто в Москве<br />в стиле современного сервиса</h1>
           <p class="hero-subtitle">Выбирайте машину за пару минут: прозрачные цены, поддержка 24/7 и быстрый старт поездки без лишних звонков.</p>
           <button class="primary-btn" onclick="location.href='/catalog.html'">Выбрать авто →</button>
-          <div class="hero-pills hero-pills--spaced">
+          <div class="hero-pills" style="margin-top: 18px;">
             <span class="hero-pill">Без залога</span>
             <span class="hero-pill">ОСАГО включено</span>
             <span class="hero-pill">Доставка по Москве</span>
