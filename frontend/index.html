@@ -2,113 +2,295 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mosquit — аренда авто в Москве</title>
-
   <link rel="stylesheet" href="/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(180deg, #f7f8fb 0%, #eef1f5 100%);
+      color: #182232;
+    }
+
+    .landing-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid #e6eaf0;
+    }
+
+    .landing-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+      color: #0f172a;
+    }
+
+    .brand span {
+      color: #ff5b2e;
+    }
+
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .landing-nav a:hover {
+      color: #ff5b2e;
+    }
+
+    .primary-btn {
+      background: #ff5b2e;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 600;
+      box-shadow: 0 10px 18px rgba(255, 91, 46, 0.2);
+    }
+
+    .primary-btn:hover {
+      background: #ec4f24;
+    }
+
+    .hero {
+      padding: 72px 0 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      color: #4b5563;
+      font-size: 18px;
+      margin-bottom: 28px;
+      max-width: 520px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-pill {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at 15% 20%, #fff7f2 0%, #ffffff 50%, #f6f8fc 100%);
+      border: 1px solid #e8ecf2;
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    .hero-image {
+      border-radius: 18px;
+      height: 230px;
+      object-fit: cover;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    .hero-card-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 24px 0;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #111827;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border: 1px solid #e7ebf1;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .feature-card h3 {
+      margin: 8px 0 6px;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    #popular-cars .card {
+      border-radius: 18px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    #popular-cars .card h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    #popular-cars .card p {
+      color: #ff5b2e;
+      font-weight: 700;
+    }
+
+    .landing-footer {
+      padding: 28px 0 36px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .landing-nav {
+        display: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-<header class="header">
-  <div class="container flex-between">
-
-    <a href="/" class="logo">
-      <span class="logo_text">Mosquit</span>
-    </a>
-
-    <nav class="nav">
-      <a href="/catalog.html">Каталог</a>
-      <a href="#how">Как это работает</a>
-      <a href="#contacts">Контакты</a>
-    </nav>
-
-    <button onclick="location.href='/catalog.html'">
-      Арендовать
-    </button>
-
-  </div>
-</header>
-
-<section class="hero">
-  <div class="container hero_content">
-
-    <div class="hero_text">
-      <h1>Аренда автомобилей в Москве</h1>
-      <p>Без залога. Быстро. Надёжно.</p>
-
-      <button onclick="location.href='/catalog.html'">
-        Выбрать авто →
-      </button>
+  <header class="landing-header">
+    <div class="container">
+      <a href="/" class="brand">Mos<span>quit</span></a>
+      <nav class="landing-nav">
+        <a href="/catalog.html">Каталог</a>
+        <a href="#how">Как это работает</a>
+        <a href="#popular">Популярные авто</a>
+      </nav>
+      <button class="primary-btn" onclick="location.href='/catalog.html'">Арендовать</button>
     </div>
+  </header>
 
-    <div class="hero_visual">
-      <div class="hero_car">
-        <svg viewBox="0 0 280 120" class="hero_svg">
-          <rect x="20" y="40" width="200" height="50" rx="20" fill="#4A6741"/>
-          <circle cx="70" cy="95" r="12" fill="#1F2937"/>
-          <circle cx="180" cy="95" r="12" fill="#1F2937"/>
-        </svg>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1 class="hero-title">Аренда авто в Москве<br />в стиле современного сервиса</h1>
+          <p class="hero-subtitle">Выбирайте машину за пару минут: прозрачные цены, поддержка 24/7 и быстрый старт поездки без лишних звонков.</p>
+          <button class="primary-btn" onclick="location.href='/catalog.html'">Выбрать авто →</button>
+          <div class="hero-pills" style="margin-top: 18px;">
+            <span class="hero-pill">Без залога</span>
+            <span class="hero-pill">ОСАГО включено</span>
+            <span class="hero-pill">Доставка по Москве</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img class="hero-image" src="/assets/car-placeholder.png" alt="Автомобиль Mosquit" />
+          <div class="hero-card-row">
+            <span>От 1 490 ₽ / сутки</span>
+            <span>Рейтинг 5.0 ★</span>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="container">
+        <h2 class="section-title">Почему выбирают Mosquit</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <img src="/assets/icons/shield.svg" class="icon" alt="Без залога" />
+            <h3>Без залога</h3>
+            <p>Прозрачные условия и фиксированные тарифы.</p>
+          </div>
+          <div class="feature-card">
+            <img src="/assets/icons/support.svg" class="icon" alt="Поддержка" />
+            <h3>Поддержка 24/7</h3>
+            <p>Помогаем в дороге и быстро отвечаем в чате.</p>
+          </div>
+          <div class="feature-card">
+            <img src="/assets/icons/delivery.svg" class="icon" alt="Доставка" />
+            <h3>Доставка авто</h3>
+            <p>Привезём автомобиль к дому, офису или метро.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="popular" class="section">
+      <div class="container">
+        <h2 class="section-title">Популярные авто</h2>
+        <div id="popular-cars" class="cars"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <div class="container">
+      <p>© Mosquit</p>
     </div>
+  </footer>
 
-  </div>
-</section>
+  <script src="/js/app.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const cars = await api.get("/api/cars?limit=4");
+      const el = document.getElementById("popular-cars");
 
-<section class="features">
-  <div class="container grid grid-3">
-
-    <div class="card">
-      <img src="/assets/icons/shield.svg" class="icon">
-      <h3>Без залога</h3>
-    </div>
-
-    <div class="card">
-      <img src="/assets/icons/support.svg" class="icon">
-      <h3>24/7 поддержка</h3>
-    </div>
-
-    <div class="card">
-      <img src="/assets/icons/delivery.svg" class="icon">
-      <h3>Доставка по Москве</h3>
-    </div>
-
-  </div>
-</section>
-
-<section class="popular">
-  <div class="container">
-
-    <h2>Популярные авто</h2>
-    <div id="popular-cars" class="cars"></div>
-
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container">
-    <p>© Mosquit</p>
-  </div>
-</footer>
-
-<script src="/js/app.js"></script>
-<script src="/js/api.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const cars = await api.get("/api/cars?limit=4");
-  const el = document.getElementById("popular-cars");
-
-  el.innerHTML = cars.map(c => `
-    <div class="card">
-      <img src="${c.image || '/assets/car-placeholder.png'}">
-      <h3>${c.brand} ${c.model}</h3>
-      <p>${c.price_1day} ₽</p>
-    </div>
-  `).join("");
-});
-</script>
-
+      el.innerHTML = cars.map(c => `
+        <div class="card">
+          <img src="${c.image || '/assets/car-placeholder.png'}" alt="${c.brand} ${c.model}">
+          <h3>${c.brand} ${c.model}</h3>
+          <p>от ${c.price_1day} ₽ / сутки</p>
+        </div>
+      `).join("");
+    });
+  </script>
 </body>
 </html>
