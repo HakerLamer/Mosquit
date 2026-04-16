@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mosquit — аренда авто в Москве</title>
   <link rel="stylesheet" href="/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
 
   <style>
     body {
@@ -230,7 +228,7 @@
           </div>
         </div>
         <div class="hero-card">
-          <img class="hero-image" src="/assets/car-placeholder.png" alt="Автомобиль Mosquit" />
+          <img class="hero-image" src="/assets/car-placeholder.svg" alt="Автомобиль Mosquit" />
           <div class="hero-card-row">
             <span>От 1 490 ₽ / сутки</span>
             <span>Рейтинг 5.0 ★</span>
@@ -280,12 +278,29 @@
   <script src="/js/api.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-      const cars = await api.get("/api/cars?limit=4");
+      const fallbackCars = [
+        { brand: "Kia", model: "Rio", price_1day: 1490, image: "/assets/car-placeholder.svg" },
+        { brand: "Hyundai", model: "Solaris", price_1day: 1690, image: "/assets/car-placeholder.svg" },
+        { brand: "Volkswagen", model: "Polo", price_1day: 1790, image: "/assets/car-placeholder.svg" },
+        { brand: "Skoda", model: "Rapid", price_1day: 1890, image: "/assets/car-placeholder.svg" },
+      ];
       const el = document.getElementById("popular-cars");
+      let cars = [];
+
+      try {
+        const data = await api.get("/api/cars/popular");
+        cars = Array.isArray(data) ? data : (data?.cars || []);
+      } catch (error) {
+        cars = fallbackCars;
+      }
+
+      if (!cars.length) {
+        cars = fallbackCars;
+      }
 
       el.innerHTML = cars.map(c => `
         <div class="card">
-          <img src="${c.image || '/assets/car-placeholder.png'}" alt="${c.brand} ${c.model}">
+          <img src="${c.image || c.main_photo || '/assets/car-placeholder.svg'}" alt="${c.brand} ${c.model}">
           <h3>${c.brand} ${c.model}</h3>
           <p>от ${c.price_1day} ₽ / сутки</p>
         </div>
