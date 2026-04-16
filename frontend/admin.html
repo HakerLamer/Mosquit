@@ -4,12 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Панель управления — Mosquit</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: linear-gradient(180deg, #f7f8fb 0%, #eef1f5 100%); color: #182232; }
+    .admin-sidebar, .stat-card, .chart-card, .admin-table-wrap, .settings-column, .admin-topbar { border-radius: 18px; border: 1px solid #e8edf3; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05); background: #fff; }
+    .admin-nav__item.active { background: #fff1ec; color: #ff5b2e; }
+    .btn--primary { background: #ff5b2e; border-color: #ff5b2e; }
+    .btn--primary:hover { background: #ec4f24; border-color: #ec4f24; }
+  </style>
 </head>
 <body class="admin-body">
   <!-- Admin Sidebar -->
