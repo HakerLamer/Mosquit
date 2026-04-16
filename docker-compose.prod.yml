@@ -13,35 +13,42 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
- 
+
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://carrent_user:supersecretpassword@postgres:5432/carrent}
-      JWT_SECRET: ${JWT_SECRET:-dev_jwt_secret}
+      JWT_SECRET: ${JWT_SECRET:-change_me_in_production}
       VIN_API_KEY: ${VIN_API_KEY:-}
-      NODE_ENV: development
+      NODE_ENV: production
     volumes:
-      - ./backend:/app
-      - /app/node_modules
       - ./backend/uploads:/app/uploads
-    ports:
-      - "3000:3000"
-    command: npm run dev
- 
+
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - frontend
     ports:
-      - "8080:80"
- 
+      - "80:80"
+      - "8443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./backend/uploads:/static/uploads:ro
+
 volumes:
   pgdata:

@@ -9,7 +9,7 @@ const logger = require('./middleware/logger');
  
 const carsRouter = require('./routes/cars');
 const bookingsRouter = require('./routes/bookings');
-const chatRouter = require('./routes/chat');
+const chatRouter = require('./routes/chats');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
  

@@ -19,7 +19,7 @@ async function migrate() {
     const { rows } = await pool.query('SELECT COUNT(*) FROM cars');
     if (parseInt(rows[0].count) === 0) {
       console.log('Seeding database...');
-      const seedSql = fs.readFileSync(path.join(__dirname, 'seed.sql'), 'utf8');
+      const seedSql = fs.readFileSync(path.join(__dirname, 'migrations/seed.sql'), 'utf8');
       await pool.query(seedSql);
       console.log('Seed completed.');
     }
